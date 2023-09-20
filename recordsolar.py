@@ -10,8 +10,6 @@ i2c_bus = board.I2C()  # uses board.SCL and board.SDA
 
 ina219 = INA219(i2c_bus)
 
-ina219.set_calibration_16V_400mA()
-
 dotenv.load_dotenv()
 
 s3_access_key = os.environ.get('S3ACCESSKEY')
@@ -34,7 +32,8 @@ with open(target, "a+") as f:
     voltage = ina219.bus_voltage + ina219.shunt_voltage  # Voltage of the power source
     current = ina219.current  # current in mA
     power = ina219.power  # power in watts
-    f.write(f"{timenow},{voltage:.04f},{current:.02f},{power:.03f}\n")
+    f.write(f"{timenow},{voltage:.05f},{current:4.02f},{power:.03f}\n")
+
 
 with open(file=target, mode='rb') as f:
     bucket_name = 'tsutsui-test'
